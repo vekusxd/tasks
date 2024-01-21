@@ -1,0 +1,26 @@
+@startuml Shape
+
+class Point{
+    - X: double
+    - Y: double
+    + Point(x: double, y: double)
+    + display() : void
+}
+
+class Shape{
+    - count: unsigned
+    - points: vector<point>
+    + Shape()
+    + addPoint(x: double, y: double) : void
+    + deletePoint(index: int) : void
+    + popPoint() : void
+    + displayPoints(index: int) : void
+    + getCount() : unsigned
+    + getArea() : double
+    + getPerimeter(double) : double
+}
+
+Point --+ Shape
+
+
+@enduml

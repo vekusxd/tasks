@@ -1,0 +1,43 @@
+@startuml Vector
+
+class Point{
+    --Fields--
+    - x : double
+    - y : double
+    --Methods--
+    + Point()
+    + Point(x: double, y: double)
+    + getX() : double
+    + getY() : double
+    --Operators--
+    + operator<<(ostream: os, other: Point) : ostream
+    + operator*(other: Point) : double
+    + operator==(other: Point) : bool
+}
+
+class Vector{
+    --Fields--
+    - x : double
+    - y : double
+    --Methods--
+    + Vector(x1: double, y1: double, x2: double, y2: double)
+    + Vector(first: point, second: point)
+    + Vector()
+    + Vector(x: doulbe, y: double)
+    + length() : double
+    + getAngle(other: Vector) : double
+    + getX() : double
+    + getY() : double
+    + setX(x: doulbe) : void
+    + setY(y: double) : void
+    --Operators--
+    + operator<<(ostream: os, other: Vector) : ostream
+    + operator+(other: Vector) : Point
+    + operator-(other: Vector) : Point
+    + operator*(other: int) : Point
+    + operator*(other: Vector) : double
+}
+
+Point --o Vector
+
+@enduml

@@ -1,0 +1,40 @@
+@startuml Fraction
+
+class SimpleFraction{
+    -- Fields --
+    - numerator : int
+    - denumerator : int
+    -- Methods --
+    + SimpleFraction()
+    + SimpleFraction(num: int, denum: int)
+    + setNum(a: int) : void
+    + setDenum(a: int) : void
+    + getNum() : int
+    + getDenum() : int
+    + display() : void
+    + add(a: SimpleFraction) : SimpleFraction
+    + sub(a: SimpleFraction) : SimpleFraction
+    + mult(a: SimpleFraction) : SimpleFraction
+    + dix(a: SimpleFraction) : SimpleFraction
+    -- Operators --
+    + operator>(other: SimpleFraction) : bool
+    + operator<(other: SimpleFraction) : bool
+    + operator>=(other: SimpleFraction) : bool
+    + operator<=(other: SimpleFraction) : bool
+    + operator==(other: SimpleFraction) : bool
+    + operator+(a: SimpleFraction) : SimpleFraction
+    + operator-(a: SimpleFraction) : SimpleFraction
+    + operator*(a: SimpleFraction) : SimpleFraction
+    + operator/(a: SimpleFraction) : SimpleFraction
+    -- Static Methods --
+    + {static} add(a: SimpleFraction, b: SimpleFraction) : SimpleFraction
+    + {static} sub(a: SimpleFraction, b: SimpleFraction) : SimpleFraction
+    + {static} mult(a: SimpleFraction, b: SimpleFraction) : SimpleFraction
+    + {static} div(a: SimpleFraction, b: SimpleFraction) : SimpleFraction
+
+}
+
+
+
+
+@enduml

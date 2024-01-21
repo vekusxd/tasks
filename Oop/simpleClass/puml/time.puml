@@ -1,0 +1,32 @@
+@startuml Time
+
+class Time{
+    --Fields--
+    - seconds : double
+    - minutes : double
+    - hours : double
+    --Methods--
+    + Time()
+    + Time(hours: double, minutes: double, seconds: double)
+    + getHours() : double
+    + getMinutes() : double
+    + getSeconds() : double
+    + getAllSeconds() : double
+    + setHours(double hours) : void
+    + setMinutes(double minutes) : void
+    + setSeconds(double seconds) : void
+    + convertToMinutes() : void
+    + convertToHours() : void
+    + convertToSeconds() : void
+    + getString() : void
+    + addHours(hours: double) : void
+    + addMinutes(minutes: double) : void
+    + addSeconds(seconds: double) : void
+    --Operators--
+    + operator+(other: Time) : Time
+    + operator-(other: Time) : Time
+    + operator==(other: Time) : bool
+    + operator<<(out: ostream, other: Time) : ostream,
+}
+
+@enduml
