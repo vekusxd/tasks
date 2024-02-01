@@ -1,0 +1,11 @@
+@startuml case2
+
+participant human AS h
+participant computer as c
+participant drive as d
+
+h -> c : запрос записи информации\n \t\t   на диск
+c -> d : запись не выполнена,\nнедостаточно памяти
+
+
+@enduml

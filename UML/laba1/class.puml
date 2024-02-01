@@ -1,0 +1,54 @@
+@startuml Class
+class HardDrive{
+    --Private--
+    - StorageSpace: gb
+    - DataAccessPerformance: ms
+    - FormFactor: inches
+    - Connection: connectionStandards
+    --Public--
+    + getStorageSpace() : gb
+    + getFreeSpace() : gb
+    + getAccessPerformance() : ms
+    + getFormFactor() : inches
+    + getConnection() : connectionStandards
+}
+
+class OS{
+    --Private--
+    - arch: architecture
+    - type: osType
+    - harddrivers: HardDrive[0..*]
+    --Public--
+    + getArch() : architecture
+    + getType() : osType
+    + getHardDrivers() : HardDrive[0..*]
+    + getHardDrive(index: int) : HardDrive
+    + write(data: data, index: int) : void
+}
+
+enum connectionStandards{
+    SATA
+    SAS
+    SCSI
+    PATA
+}
+
+enum architecture{
+    X86
+    X64
+}
+
+enum osType{
+    Linux
+    Windows
+    MacOs
+    FreeBsd
+}
+
+OS o-- HardDrive
+connectionStandards ..> HardDrive
+
+architecture ..> OS
+osType..> OS
+
+@enduml

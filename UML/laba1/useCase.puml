@@ -1,0 +1,26 @@
+@startuml useCase
+
+skinparam actorStyle awesome
+:User:
+
+left to right direction
+
+package "Операции с диском"{
+    "Чтение с диска" as (Read)
+    "Запись на диск" as (Write)
+    "Форматирование диска" as (Format)
+    "Переименование диска" as (Rename)
+    "Монтирование диска" as (Mount)
+    "Очистка диска" as (Clean)
+
+}
+
+User --> (Read)
+User --> (Write)
+User --> (Format)
+User --> (Rename)
+User --> (Mount)
+User --> (Clean)
+
+
+@enduml

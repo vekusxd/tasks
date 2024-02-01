@@ -1,0 +1,10 @@
+@startuml case4
+
+participant human as h
+participant computer as c
+participant drive as d
+
+h -> c : запрос записи информации\n\t\t    на диск
+c -> d : запись не выполнена,\nповрежден диск
+
+@enduml

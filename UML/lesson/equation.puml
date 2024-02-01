@@ -1,0 +1,20 @@
+@startuml Equation
+start
+:1-й шаг: Привести квадратное уравнение к виду: ax^2 + bx + c = 0;
+:2-й шаг: Найти дескриминант:  d = b^2 - 4ac;
+
+switch(d)
+case (d > 0)
+    #PaleGreen : Уравнение имеет 2 разных корня\nx1 = (-b + sqrt(d)) / 2a\nx2 = (-b - sqrt(d)) /2a;
+case (d = 0)
+    #PaleGreen : Уравнение имеет 2 одинаковых корня\nx1 = x2 = (-b + sqrt(d)) / 2a;
+case (d < 0)
+    #Pink : Уравнение не имеет дейсвтительных корней;
+    kill;
+endswitch
+
+stop
+
+ #PaleGreen : Ответ;
+
+@enduml

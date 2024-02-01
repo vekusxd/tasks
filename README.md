@@ -9,3 +9,9 @@
 ### Oop:
 
 - [Simple class](./Oop/simpleClass)
+
+
+
+### Uml:
+
+- [Первая работа](./UML/laba1/)

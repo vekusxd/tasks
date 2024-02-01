@@ -1,0 +1,13 @@
+@startuml case5
+
+participant human as h
+participant computer as c
+participant drive as d
+
+h -> c : запрос записи информации\n\t\t    на диск
+c -> d : запись выполнена
+h -> c : запрос чтения информации\n\t\tс диска
+c -> d : чтение невозможно,\nвозникли ошибки
+
+
+@enduml

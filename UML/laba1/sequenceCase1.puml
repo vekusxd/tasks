@@ -1,0 +1,11 @@
+@startuml case1
+
+participant human as h
+participant computer as c
+participant drive as d
+
+h -> c : запрос записи информации\n\t\t    на диск
+c -> d : запись завершена\n\t     успешно
+h -> c : запрос чтения информации\n\t\t    с диска
+c -> d : информация получена
+@enduml
