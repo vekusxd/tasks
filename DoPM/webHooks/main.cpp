@@ -32,6 +32,10 @@ int main(){
 
         std::cout << command << std::endl;
 
+        std::regex pattern1("^\\s*удалить\\s+([^\\u0000-\\u007F]|\\w)+\\s*$");
+        std::regex pattern2("^\\s*Удалить\\s+([^\\u0000-\\u007F]|\\w)+\\s*$");
+
+
         if(std::regex_match(command, pattern)){
             std::fstream in("jsonTemplates/template.json", std::ios_base::in);
             auto jsonTemp = nlohmann::json::parse(in);
@@ -41,24 +45,56 @@ int main(){
             Db::insertSession(json);
 
             res.set_content(jsonTemp.dump(), "text/json;charset=UTF-8");
-            } 
+            }
+        else if(std::regex_match(command, pattern1) || std::regex_match(command, pattern2)){
+            bool result = Db::deleteItem(json);
+
+            std::fstream in("jsonTemplates/temp.json", std::ios_base::in);
+            std::string item = json["request"]["nlu"]["tokens"][1];
+            auto jsonTemp = nlohmann::json::parse(in);
+            if(result){
+                jsonTemp["response"]["text"] = item + " удален из корзины";
+                res.set_content(jsonTemp.dump(), "text/json;charset=UTF-8");
+            }
+            else{
+                jsonTemp["response"]["text"] = item + " не найден в корзине";
+                res.set_content(jsonTemp.dump(), "text/json;charset=UTF-8");
+            }
+
+
+        }
         else if(command == "очистить корзину"){
-                Db::clearSession(json);
-                std::fstream in("jsonTemplates/template.json", std::ios_base::in);
+                bool idk = Db::clearSession(json);
+                std::fstream in("jsonTemplates/temp.json", std::ios_base::in);
                 auto jsonTemp = nlohmann::json::parse(in);
 
-                jsonTemp["response"]["text"] = "Корзина была очищена";
-                res.set_content(jsonTemp.dump(), "text/json;charset=UTF-8");   
+                if(idk){
+                   jsonTemp["response"]["text"] = "Корзина была очищена"; 
+                    res.set_content(jsonTemp.dump(), "text/json;charset=UTF-8");   
+                }
+                else{
+                   jsonTemp["response"]["text"] = "Корзина пустая!"; 
+                   res.set_content(jsonTemp.dump(), "text/json;charset=UTF-8");   
+                }
 
             }
-        else if(command == "показать содержимое корзины"){
-            std::fstream in("jsonTemplates/template.json", std::ios_base::in);
-
+        else if(command == "что в корзине"){
+            std::fstream in("jsonTemplates/temp.json", std::ios_base::in);
+            
             auto jsonTemp = nlohmann::json::parse(in);
+
             jsonTemp["response"]["text"] = Db::getCart(json);
-            //jsonTemp["response"]["text"] = "idk";
 
             res.set_content(jsonTemp.dump(), "text/json;charset=UTF-8");   
+        }
+        else if(command == "сумма"){
+             std::fstream in("jsonTemplates/temp.json", std::ios_base::in);
+            
+            auto jsonTemp = nlohmann::json::parse(in);
+
+            jsonTemp["response"]["text"] = Db::getSum(json);
+
+            res.set_content(jsonTemp.dump(), "text/json;charset=UTF-8"); 
         }
         else if(command == "помощь"){
             res.set_content(Db::getHelpMessage(), "text/json;charset=UTF-8");
@@ -87,6 +123,9 @@ int main(){
         else if(command == "завершить покупку - записать текущие товары в файл"){
             res.set_content(Db::getHelpCommand(6), "text/json;charset=UTF-8");
         }
+        else if(command == "корзина"){
+            res.set_content(Db::getBasketMessage(), "text/json;charset=UTF-8");
+        }
         
         else{
             std::fstream in("jsonTemplates/template.json", std::ios_base::in);
@@ -99,10 +138,10 @@ int main(){
             
     });
 
-    //srv.set_mount_point("/", ".");
-    
+   //srv.set_mount_point("/", ".");
+
     srv.Get("/stop", [&](const httplib::Request& req, httplib::Response& res){
         srv.stop();
     });
-   srv.listen("localhost", 2005);
+   srv.listen("localhost", 2000);
 }

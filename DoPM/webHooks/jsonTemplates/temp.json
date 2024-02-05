@@ -1,0 +1,30 @@
+{
+    "response": {
+      "text": "Добрый день!",
+      "tts": "Добрый день!",
+      "buttons": [
+        {
+          "title": "Очистить корзину",
+          "payload": {},
+          "hide": false
+        },
+        {
+          "title": "Что в корзине",
+          "payload": {},
+          "hide": false
+        },
+        {
+          "title": "Сумма",
+          "payload": {},
+          "hide": false
+        },
+        {
+          "title": "вернуться",
+          "payload": {},
+          "hide": false
+        }
+      ],
+      "end_session": false
+    },
+    "version": "1.0"
+  }

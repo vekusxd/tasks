@@ -67,7 +67,7 @@ namespace Db{
         }   
     }
 
-    void clearSession(const nlohmann::json& json){
+    bool clearSession(const nlohmann::json& json){
         std::string userId = json["session"]["user_id"];
         auto collection = db["sessions"];
 
@@ -78,13 +78,19 @@ namespace Db{
         }
 
         array newArray; 
+        auto js = nlohmann::json::parse(ss);
 
         if(ss.str().empty()){
             auto inserted = collection.insert_one(make_document(kvp("_id", userId), kvp("goods", newArray)));
-            return;
+            return false;
+        }
+
+        if(js["goods"].empty()){
+            return false;
         }
 
         auto update_one = collection.replace_one(make_document(kvp("_id", userId)), make_document(kvp("_id", userId), kvp("goods", newArray)));
+        return true;
     }
 
     std::string getCart(const nlohmann::json& json){
@@ -100,7 +106,7 @@ namespace Db{
 
         auto sessionJson = nlohmann::json::parse(ss);
         std::string result;
-        int counter = 0;
+        //int counter = 0;
 
         if(sessionJson["goods"][0].is_null()){
             return "Корзина пуста";
@@ -109,10 +115,39 @@ namespace Db{
             std::string tmp1 = x.value()["item"];
             std::string tmp2 = x.value()["price"];
             result += tmp1 + ": " + tmp2 + "\n";
+            //counter += std::stoi(tmp2);
+        }
+
+        //result += "Итог: " + std::to_string(counter);
+        return result;
+    }
+
+    std::string getSum(const nlohmann::json& json){
+        std::string userId = json["session"]["user_id"];
+
+        auto collection = db["sessions"];
+
+        auto cursor = collection.find(make_document(kvp("_id", userId)));
+        std::stringstream ss;
+        for (auto doc : cursor) {
+            ss << bsoncxx::to_json(doc, bsoncxx::ExtendedJsonMode::k_relaxed);
+        }
+
+        auto sessionJson = nlohmann::json::parse(ss);
+    
+        if(sessionJson["goods"][0].is_null()){
+            return "Корзина пуста";
+        }
+
+        int counter = 0;
+        std::string result;
+
+        for (auto& x : sessionJson["goods"].items()){
+            std::string tmp2 = x.value()["price"];
             counter += std::stoi(tmp2);
         }
 
-        result += "Итог: " + std::to_string(counter);
+        result += "Стоимость товаров: " + std::to_string(counter);
         return result;
     }
 
@@ -141,5 +176,61 @@ namespace Db{
             ss << bsoncxx::to_json(doc, bsoncxx::ExtendedJsonMode::k_relaxed);
         }
         return ss.str();
+    }
+
+    std::string getBasketMessage(){
+        mongocxx::options::find opts;
+        opts.projection(make_document(kvp("_id", 0)));
+
+        auto collection = db["basketMessage"];
+
+        auto cursor = collection.find(make_document(kvp("_id", getRandom())), opts);
+        std::stringstream ss;
+         for (auto doc : cursor) {
+            ss << bsoncxx::to_json(doc, bsoncxx::ExtendedJsonMode::k_relaxed);
+        }
+        return ss.str();
+    }
+
+    bool deleteItem(const nlohmann::json& json){
+        std::string userId = json["session"]["user_id"];
+
+        auto collection = db["sessions"];
+
+        auto cursor = collection.find(make_document(kvp("_id", userId)));
+        std::stringstream ss;
+        for (auto doc : cursor) {
+            ss << bsoncxx::to_json(doc, bsoncxx::ExtendedJsonMode::k_relaxed);
+        }
+
+        auto sessionJson = nlohmann::json::parse(ss);
+
+        if(sessionJson["goods"].is_null()){
+            return false;
+        }
+
+        if(sessionJson["goods"].empty()){
+            return false;
+        }
+
+        std::string toDelete = json["request"]["nlu"]["tokens"][1];
+        int index = -1;
+        for(auto iter = sessionJson["goods"].begin(); iter != sessionJson["goods"].end(); ++iter){
+            if(iter.value()["item"] == toDelete){
+                index = iter - sessionJson["goods"].begin();
+                break;
+            }
+        }   
+
+        sessionJson["goods"].erase(index);
+
+        if(index == -1){
+            return false;
+        }
+
+        bsoncxx::v_noabi::document::view_or_value bsonobj = bsoncxx::from_json(sessionJson.dump());
+        auto update_one = collection.replace_one(make_document(kvp("_id", userId)), bsonobj);
+
+        return true;    
     }
 }
