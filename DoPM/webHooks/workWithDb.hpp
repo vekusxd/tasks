@@ -60,22 +60,30 @@ namespace Db{
             array newArray;
             newArray.append(make_document(kvp(lable, price)));
             auto inserted = collection.insert_one(make_document(kvp("_id", userId), kvp("goods", newArray)));
+            auto update_one = collection.update_one(make_document(kvp("_id", userId)), make_document(kvp("$push", make_document(kvp("goods", make_document(kvp("item",  lable), kvp("price", price)))))));
         }
         else{
-            array goodArray;
-            goodArray.append(lable);
-            goodArray.append(price);
-            auto update_one = collection.update_one(make_document(kvp("_id", userId)), make_document(kvp("$push", make_document(kvp("goods", make_document(kvp(lable, price)))))));
+            auto update_one = collection.update_one(make_document(kvp("_id", userId)), make_document(kvp("$push", make_document(kvp("goods", make_document(kvp("item",  lable), kvp("price", price)))))));
         }   
-        
     }
 
     void clearSession(const nlohmann::json& json){
         std::string userId = json["session"]["user_id"];
-
         auto collection = db["sessions"];
-        array newArray;
-        
+
+        auto cursor = collection.find(make_document(kvp("_id", userId)));
+        std::stringstream ss;
+        for (auto doc : cursor) {
+            ss << bsoncxx::to_json(doc, bsoncxx::ExtendedJsonMode::k_relaxed);
+        }
+
+        array newArray; 
+
+        if(ss.str().empty()){
+            auto inserted = collection.insert_one(make_document(kvp("_id", userId), kvp("goods", newArray)));
+            return;
+        }
+
         auto update_one = collection.replace_one(make_document(kvp("_id", userId)), make_document(kvp("_id", userId), kvp("goods", newArray)));
     }
 
@@ -98,13 +106,40 @@ namespace Db{
             return "Корзина пуста";
         }
         for (auto& x : sessionJson["goods"].items()){
-            std::string tmp1 = x.value().items().begin().key();
-            std::string tmp2 = x.value().items().begin().value();
+            std::string tmp1 = x.value()["item"];
+            std::string tmp2 = x.value()["price"];
             result += tmp1 + ": " + tmp2 + "\n";
             counter += std::stoi(tmp2);
         }
 
         result += "Итог: " + std::to_string(counter);
         return result;
+    }
+
+    std::string getHelpMessage(){
+        mongocxx::options::find opts;
+        opts.projection(make_document(kvp("_id", 0)));
+
+        auto collection = db["helpMessage"];
+        auto cursor = collection.find({}, opts);
+        std::stringstream ss;
+         for (auto doc : cursor) {
+            ss << bsoncxx::to_json(doc, bsoncxx::ExtendedJsonMode::k_relaxed);
+        }
+        return ss.str();
+    }
+
+    std::string getHelpCommand(int id){
+        mongocxx::options::find opts;
+        opts.projection(make_document(kvp("_id", 0)));
+
+        auto collection = db["helpCommands"];
+
+        auto cursor = collection.find(make_document(kvp("_id", id)), opts);
+        std::stringstream ss;
+        for (auto doc : cursor) {
+            ss << bsoncxx::to_json(doc, bsoncxx::ExtendedJsonMode::k_relaxed);
+        }
+        return ss.str();
     }
 }

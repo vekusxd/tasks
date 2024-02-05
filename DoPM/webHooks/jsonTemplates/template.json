@@ -1,20 +1,20 @@
 {
     "response": {
       "text": "",
-      "tts": "Хорошего дня!",
+      "tts": "",
       "buttons": [
         {
-          "title": "Показать\nсодержимое корзины",
+          "title": "Помощь",
           "payload": {},
           "hide": false
         },
         {
-          "title": "Очистить корзину",
+          "title": "Корзина",
           "payload": {},
           "hide": false
         },
         {
-          "title": "Сохранить\nсодержимое корзины",
+          "title": "Покупка завершена",
           "payload": {},
           "hide": false
         }
