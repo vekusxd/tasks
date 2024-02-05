@@ -16,6 +16,8 @@
 
 - [Первая работа](./UML/laba1/)
 
+- [Контрольная работа](./UML/umlTest/)
+
 ### DoPm:
 
 - [Protobuf example](./DoPM/protoTest/)
