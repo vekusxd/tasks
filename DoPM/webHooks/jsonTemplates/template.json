@@ -1,0 +1,26 @@
+{
+    "response": {
+      "text": "",
+      "tts": "Хорошего дня!",
+      "buttons": [
+        {
+          "title": "Показать\nсодержимое корзины",
+          "payload": {},
+          "hide": false
+        },
+        {
+          "title": "Очистить корзину",
+          "payload": {},
+          "hide": false
+        },
+        {
+          "title": "Сохранить\nсодержимое корзины",
+          "payload": {},
+          "hide": false
+        }
+      ],
+      "end_session": false
+    },
+    "version": "1.0"
+  }
+  

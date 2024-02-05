@@ -1,0 +1,50 @@
+@startuml ClassDiagram
+
+class  User{
+    --Private--
+    - id: string
+    - pc: Pc
+    --Public--
+    + getData(): Data
+    + sendReply(data: Data) : void
+}
+
+class Admin{
+    --Private--
+    - adminPassword: string
+    --Public--
+    + setPcSettings(): void
+    + setNotificationSettings(): void
+    + makeReport(): void
+    + getLogs() : Data
+    + getLogs(date: string, Pc: pc) : Data
+    + makeWarningNotification(data: Data, notificatinType: Notification)
+}
+
+enum Notification{
+    Warning
+    Question
+    Error
+    Critical
+    Information
+}
+
+class Pc{
+    --Private--
+    - id: string
+    - Gpu: string
+    - Cpu: string
+    - IpAdress: string
+    - Ram: string
+    - Harddrive: string
+    --Public--
+    + ping(ip: String) : void
+    + clearHarddrive() : void
+}
+
+
+User<|--Admin
+User o-- Pc
+Notification ..> Admin
+
+@enduml

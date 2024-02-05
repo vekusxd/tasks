@@ -1,0 +1,15 @@
+@startuml Sequance
+
+participant user as u
+participant server as sv
+participant admin as a
+
+a -> sv : Start server
+a -> sv : Write logs
+u -> sv : Get Some Data
+sv -> a : Critical situtaion
+a -> sv : Fix issue
+a -> sv : Restart server
+a -> u : Make Report
+
+@enduml
