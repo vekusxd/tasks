@@ -11,6 +11,6 @@ set(inja deps/inja/inja.hpp)
 find_package(mongocxx REQUIRED)
 find_package(bsoncxx REQUIRED)
 
-add_executable(server ${httplib} ${inja} ${nlohmann} main.cpp workWithDb.hpp)
+add_executable(server ${httplib} ${nlohmann} server.cpp workWithDb.hpp client.hpp)
 
 target_link_libraries(server PRIVATE mongo::mongocxx_shared mongo::bsoncxx_shared)

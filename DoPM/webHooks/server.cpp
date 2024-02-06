@@ -60,8 +60,6 @@ int main(){
                 jsonTemp["response"]["text"] = item + " не найден в корзине";
                 res.set_content(jsonTemp.dump(), "text/json;charset=UTF-8");
             }
-
-
         }
         else if(command == "очистить корзину"){
                 bool idk = Db::clearSession(json);
@@ -78,6 +76,20 @@ int main(){
                 }
 
             }
+        else if(command == "покупка завершена"){
+            bool idk = Db::sendToWebhook(json);
+            std::fstream in("jsonTemplates/temp.json", std::ios_base::in);
+            auto jsonTemp = nlohmann::json::parse(in);
+            if(idk){
+                jsonTemp["response"]["text"] = "Данные успешно сохранены"; 
+                Db::clearSession(json);
+                res.set_content(jsonTemp.dump(), "text/json;charset=UTF-8"); 
+            }
+            else{
+                jsonTemp["response"]["text"] = "Корзина пустая!"; 
+                res.set_content(jsonTemp.dump(), "text/json;charset=UTF-8");
+            }
+        }
         else if(command == "что в корзине"){
             std::fstream in("jsonTemplates/temp.json", std::ios_base::in);
             
@@ -143,5 +155,5 @@ int main(){
     srv.Get("/stop", [&](const httplib::Request& req, httplib::Response& res){
         srv.stop();
     });
-   srv.listen("localhost", 2000);
+   srv.listen("localhost", 1999);
 }

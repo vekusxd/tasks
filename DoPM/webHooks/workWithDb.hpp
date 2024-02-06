@@ -10,6 +10,8 @@
 #include <string>
 #include <sstream>
 #include "deps/nlohmann/json.hpp"
+#include "client.hpp"
+#include "deps/httplib/httplib.h"
 
 using bsoncxx::builder::basic::kvp;
 using bsoncxx::builder::basic::make_document;
@@ -233,4 +235,31 @@ namespace Db{
 
         return true;    
     }
+
+    bool sendToWebhook(const nlohmann::json& json){
+        std::string userId = json["session"]["user_id"];
+        auto collection = db["sessions"];
+
+        auto cursor = collection.find(make_document(kvp("_id", userId)));
+        std::stringstream ss;
+        for (auto doc : cursor) {
+            ss << bsoncxx::to_json(doc, bsoncxx::ExtendedJsonMode::k_relaxed);
+        }
+
+        auto sessionJson = nlohmann::json::parse(ss);
+
+        if(sessionJson["goods"].is_null()){
+            return false;
+        }
+
+        if(sessionJson["goods"].empty()){
+            return false;
+        }
+
+        Client::post(sessionJson);
+        return true;
+    }
+
+
+
 }
