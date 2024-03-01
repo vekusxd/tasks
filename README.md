@@ -9,6 +9,8 @@
 ### Oop:
 
 - [Simple class](./Oop/simpleClass)
+  
+- [Any](./Oop/any)
 
 
 
