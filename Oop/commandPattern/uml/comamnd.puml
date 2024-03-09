@@ -1,0 +1,106 @@
+@startuml Command
+
+
+    interface Command{
+    + {abstract}exucute(): void
+    + {abstract}undo() : void
+    + {abstract}clone() : unique_ptr<Command>
+}
+
+package CommandsImpl{
+class TypeCommand implements Command{
+    --Methods--
+    + exucute(): void
+    + undo(): void
+    + clone(): unique_ptr<Command>
+    --Fields--
+    - editor : Editor
+    - ch : char
+    - prevBuf : string
+    - prevCursorPos : int
+}
+
+class ShiftLeftCommand implements Command{
+    --Methods--
+    + exucute(): void
+    + undo(): void
+    + clone(): unique_ptr<Command>
+    --Fields--
+    - editor : Editor
+    - prevCursorPos : int
+}
+
+class ShiftRightCommand implements Command{
+    --Methods--
+    + exucute(): void
+    + undo(): void
+    + clone(): unique_ptr<Command>
+    --Fields--
+    - editor : Editor
+    - prevCursorPos : int
+}
+
+class BackspaceCommand implements Command{
+    --Methods--
+    + exucute(): void
+    + undo(): void
+    + clone(): unique_ptr<Command>
+    --Fields--
+    - editor : Editor
+    - prevCursorPos : int
+    - prevBuf : string
+}
+
+class EmptyCommand implements Command{
+    --Methods--
+    + exucute(): void
+    + undo(): void
+    + clone(): unique_ptr<Command>
+}
+}
+
+class Editor{
+    --Methods--
+    + Editor() : void
+    + getText() : string
+    + getCursorPos() : int
+    + setText(text: string) : void
+    + setCursor(pos: int) : void
+    + shiftleft() : void
+    + shiftright() : void
+    + type(ch: char) : void
+    + backspace() : void
+    --Fields--
+    - buf : string
+    - cursorPos : int
+}
+
+
+
+class Controller{
+    --Methods--
+    + Controller(Editor editor)
+    + onButton_1() : void
+    + onButton_2() : void
+    + onButton_3() : void
+    + onButton_4() : void
+    + undo() : void
+    + redo() : void
+    --Fields--
+    - Editor editor
+    - button_1 : Command
+    - button_2 : Command
+    - button_3 : Command
+    - button_4 : Command
+}
+
+Editor --o Controller
+Controller o-- Command
+
+TypeCommand o-- Editor
+ShiftLeftCommand o-- Editor
+ShiftRightCommand o-- Editor
+BackspaceCommand o-- Editor
+
+
+@enduml

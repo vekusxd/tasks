@@ -88,4 +88,25 @@ int main(){
     controller.redo();
 
     std::cout <<  "Current text and cursor pos: " << controller.getText() << ", " << controller.getCurrentPose() << std::endl;
+
+    controller.setButton3Listener(new TypeCommand(editor, 'l'));
+
+    controller.on_button_3();
+    controller.on_button_3();
+    controller.on_button_3();
+    controller.on_button_3();
+
+    std::cout <<  "Current text and cursor pos: " << controller.getText() << ", " << controller.getCurrentPose() << std::endl;
+
+    controller.undo();
+    controller.undo();
+    controller.undo();
+
+    std::cout <<  "Current text and cursor pos: " << controller.getText() << ", " << controller.getCurrentPose() << std::endl;
+
+    controller.redo();
+    controller.redo();
+    controller.redo();
+
+    std::cout <<  "Current text and cursor pos: " << controller.getText() << ", " << controller.getCurrentPose() << std::endl;
 }

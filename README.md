@@ -12,7 +12,7 @@
   
 - [Any](./Oop/any)
 
-- [Курсор](./Oop/commandPattern/)
+- [Курсор](./Oop/commandPattern/README.md)
 
 
 
