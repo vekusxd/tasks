@@ -30,3 +30,4 @@
 ### LeetCode:
 
 - [Week 1](./C++Basics/leetcode/week1/README.md)
+- [Week 2](./C++Basics/leetcode/week2/README.md)
